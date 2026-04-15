@@ -1,0 +1,249 @@
+/* =====================================
+   1. PAGE LAYOUT
+===================================== */
+
+.checkout-page {
+  background: #fdfdfd;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.checkout-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 60px;
+  padding: 60px 20px;
+}
+
+.checkout-left {
+  flex: 1.2;
+}
+
+.checkout-right {
+  flex: 0.8;
+  background: #f9f7f2;
+  padding: 35px;
+  border-radius: 12px;
+  height: fit-content;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+}
+
+/* =====================================
+   2. BRAND LOGO
+===================================== */
+
+.brand-logo {
+  font-size: 34px;
+  font-weight: 800;
+  color: #5b0e1a;
+  text-decoration: none;
+  margin-bottom: 40px;
+  display: block;
+  font-family: 'Playfair Display', serif;
+}
+
+/* =====================================
+   3. FORM STYLING
+===================================== */
+
+.form-section {
+  margin-bottom: 35px;
+}
+
+.form-section h3 {
+  font-size: 13px;
+  margin-bottom: 18px;
+  letter-spacing: 1px;
+  color: #444;
+}
+
+.form-section input,
+.form-section select {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.form-section input:focus,
+.form-section select:focus {
+  border-color: #5b0e1a;
+  box-shadow: 0 0 0 2px rgba(91,14,26,0.1);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+/* =====================================
+   4. PLACE ORDER BUTTON
+===================================== */
+
+.place-order-btn {
+  width: 100%;
+  background: #5b0e1a;
+  color: #fff;
+  padding: 18px;
+  border: none;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 25px;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.place-order-btn:hover {
+  background: #3d0a12;
+  transform: translateY(-2px);
+}
+
+/* =====================================
+   5. ORDER SUMMARY
+===================================== */
+
+.order-summary-box {
+  width: 100%;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.summary-img {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.summary-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.qty-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #5b0e1a;
+  color: #fff;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-name {
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0;
+}
+
+.item-variant {
+  font-size: 12px;
+  color: #888;
+}
+
+.item-total {
+  margin-left: auto;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* =====================================
+   6. DISCOUNT BOX
+===================================== */
+
+.discount-box {
+  display: flex;
+  gap: 10px;
+  margin: 30px 0;
+  border-top: 1px solid #eee;
+  padding-top: 25px;
+}
+
+.discount-box input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.discount-box button {
+  padding: 12px 20px;
+  background: #eee;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.discount-box button:hover {
+  background: #ddd;
+}
+
+/* =====================================
+   7. PRICE CALCULATION
+===================================== */
+
+.price-calculation .line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #666;
+  font-size: 14px;
+}
+
+.price-calculation .total {
+  border-top: 1px solid #eee;
+  padding-top: 18px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #5b0e1a;
+}
+
+/* =====================================
+   8. RESPONSIVE
+===================================== */
+
+@media (max-width: 992px) {
+  .checkout-container {
+    flex-direction: column;
+  }
+
+  .checkout-right {
+    order: -1;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-container {
+    padding: 30px 15px;
+  }
+
+  .brand-logo {
+    font-size: 28px;
+  }
+}

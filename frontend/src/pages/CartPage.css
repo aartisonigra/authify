@@ -1,0 +1,44 @@
+.cart-page-wrapper { background: #fff; min-height: 100vh; font-family: 'Inter', sans-serif; }
+.cart-main-container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+.cart-title { font-size: 32px; font-weight: 700; color: #5b0e1a; margin-bottom: 30px; }
+
+.cart-layout { display: flex; gap: 40px; }
+.cart-items-section { flex: 1.5; }
+
+/* Banners */
+.cart-info-banner { background: #e8f5e9; color: #2e7d32; padding: 15px; border-radius: 4px; font-size: 14px; margin-bottom: 20px; }
+
+/* Basket Card */
+.basket-card { display: flex; align-items: center; gap: 20px; padding: 20px 0; border-bottom: 1px solid #eee; }
+.basket-img { width: 100px; height: 100px; object-fit: cover; background: #f9f7f2; border-radius: 4px; }
+.basket-details { flex: 1; }
+.basket-details h3 { font-size: 18px; margin: 0 0 5px; color: #333; }
+.basket-meta { font-size: 13px; color: #888; margin-bottom: 10px; }
+
+.basket-pricing .current-price { font-weight: 700; color: #5b0e1a; font-size: 16px; margin-right: 10px; }
+.basket-pricing .old-price { text-decoration: line-through; color: #999; font-size: 14px; }
+
+/* Controls */
+.basket-controls { display: flex; align-items: center; gap: 20px; }
+.qty-box { display: flex; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; }
+.qty-box button { background: #f9f9f9; border: none; padding: 8px 15px; cursor: pointer; }
+.qty-box span { padding: 8px 15px; font-weight: 600; }
+.remove-trash { background: none; border: none; font-size: 20px; cursor: pointer; color: #ccc; }
+
+/* Promo */
+.promo-section { display: flex; gap: 10px; margin-top: 30px; }
+.promo-section input { flex: 1; padding: 12px; border: 1px solid #ddd; outline: none; }
+.apply-btn { padding: 0 25px; border: 1px solid #5b0e1a; background: #fff; color: #5b0e1a; cursor: pointer; font-weight: 600; }
+
+/* Right Summary */
+.cart-summary-sidebar { flex: 0.7; background: #fdfdfd; padding: 25px; border: 1px solid #f0f0f0; border-radius: 8px; height: fit-content; }
+.summary-row { display: flex; justify-content: space-between; font-size: 18px; margin-bottom: 20px; }
+.summary-row .bold { font-weight: 800; color: #5b0e1a; }
+
+.checkout-now-btn { width: 100%; background: #5b0e1a; color: #fff; border: none; padding: 18px; font-size: 16px; font-weight: 700; border-radius: 4px; cursor: pointer; margin-bottom: 10px; transition: 0.3s; }
+.checkout-now-btn:hover { background: #400a12; }
+.secure-text { text-align: center; font-size: 11px; color: #999; }
+
+.gift-promo-box { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
+.gift-promo-box h4 { font-size: 14px; margin-bottom: 5px; color: #333; }
+.gift-promo-box p { font-size: 12px; color: #666; }

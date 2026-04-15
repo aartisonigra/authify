@@ -1,0 +1,50 @@
+/* Base Button Style */
+.custom-btn-main {
+  padding: 12px 30px;
+  border-radius: 50px; /* Rounded look mate */
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+/* Primary Variant (Dark Maroon) */
+.custom-btn-main.primary {
+  background-color: #5b0e1a;
+  color: white;
+  box-shadow: 0 4px 10px rgba(91, 14, 26, 0.2);
+}
+
+.custom-btn-main.primary:hover {
+  background-color: #7a1424;
+  transform: translateY(-2px);
+}
+
+/* Secondary Variant (Border Style) */
+.custom-btn-main.secondary {
+  background: transparent;
+  border: 1px solid #5b0e1a;
+  color: #5b0e1a;
+}
+
+.custom-btn-main.secondary:hover {
+  background-color: #5b0e1a;
+  color: white;
+}
+
+/* Blue Variant (Auth Page mate) */
+.custom-btn-main.blue {
+  background-color: #5e5df0;
+  color: white;
+  box-shadow: 0 10px 20px rgba(94, 93, 240, 0.3);
+}
+
+.custom-btn-main.blue:hover {
+  background-color: #4a49d1;
+  transform: scale(1.02);
+}

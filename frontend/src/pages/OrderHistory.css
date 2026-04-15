@@ -1,0 +1,90 @@
+/* OrderHistory.css */
+.orders-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.orders-title {
+    font-size: 26px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.no-orders {
+    text-align: center;
+    padding: 50px;
+    background: #f9f9f9;
+    border-radius: 15px;
+    color: #888;
+}
+
+.order-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 5px solid #e85289; /* Dreama Pink Accent */
+    transition: 0.3s;
+}
+
+.order-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.order-info h3 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.order-info p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.order-price {
+    font-weight: 600;
+    color: #e85289;
+    font-size: 18px;
+}
+
+.download-btn {
+    background: white;
+    color: #e85289;
+    border: 2px solid #e85289;
+    padding: 8px 18px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 13px;
+    transition: 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.download-btn:hover {
+    background: #e85289;
+    color: white;
+}
+
+.order-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    background: #e3f2fd;
+    color: #1976d2;
+    margin-top: 8px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
