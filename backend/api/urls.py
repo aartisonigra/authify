@@ -1,34 +1,22 @@
-from django.urls import path
-from . import views 
+from django.contrib import admin
+from django.urls import path, include
+from django.http import HttpResponse
+# અહીં આપણે સ્પેસિફિક ફંક્શન્સ જ ડાયરેક્ટ ઈમ્પોર્ટ કરીએ છીએ, જેથી મોડ્યુલ કન્ફ્યુઝન જ ન થાય
+from api.views import profile_view, add_money, place_order 
+
+def home(request):
+    return HttpResponse("Hello Aarti! Django + Google Login is working ✅")
 
 urlpatterns = [
-    # ==============================
-    # 1. AUTHENTICATION
-    # ==============================
-    path('signup/', views.signup, name='signup'),
-    path('login/', views.login, name='login'),
+    path('admin/', admin.site.urls),
+    path('', home),
     
-    # ==============================
-    # 2. PRODUCTS & STORE
-    # ==============================
-    path('products/', views.get_products, name='get_products'),
-    path('add-to-cart/', views.add_to_cart, name='add_to_cart'),
-    path('routine/', views.add_to_routine, name='add_to_routine'), # ખાતરી કરો કે views માં આ ફંક્શન છે
+    # એપ લેવલના રાઉટ્સ
+    path('api/', include('api.urls')), 
+    path('accounts/', include('allauth.urls')),
     
-    # ==============================
-    # 3. USER PROFILE & HISTORY (NEW)
-    # ==============================
-    path('profile/', views.profile_view, name='profile_view'),
-    path('order-history/', views.order_history, name='order_history'),
-    
-    # ==============================
-    # 4. ORDERS & INVOICE
-    # ==============================
-    path('place-order/', views.place_order, name='place_order'), 
-    path('download-invoice/<int:order_id>/', views.download_invoice, name='download_invoice'),
-
-    # ==============================
-    # 5. AI FEATURES
-    # ==============================
-    path('scan-skin/', views.scan_skin, name='scan_skin'),
+    # અહીં ડાયરેક્ટ ફંક્શન પાસ કર્યા
+    path('api/place-order/', place_order, name='place_order'),
+    path('api/profile/', profile_view, name='profile_view'), 
+    path('api/add-money/', add_money, name='add_money'),     
 ]

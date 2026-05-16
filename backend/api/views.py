@@ -1,17 +1,19 @@
 import json
 import google.generativeai as genai
 import PIL.Image
+import decimal
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.conf import settings
-from .models import Product, CartItem, Order, UserRoutine, Profile, Review
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from reportlab.pdfgen import canvas
+from .models import Product, CartItem, Order, UserRoutine, Profile, Review
 
 # ==============================
 # AI CONFIGURATION (GEMINI)
@@ -83,9 +85,10 @@ def login(request):
             data = json.loads(request.body)
             user = authenticate(username=data.get("email"), password=data.get("password"))
             if user:
+                tokens = get_tokens_for_user(user)
                 return JsonResponse({
                     "message": "Login success", 
-                    **get_tokens_for_user(user), 
+                    "token": tokens, # આ આખું ઓબ્જેક્ટ (refresh અને access) મોકલશે
                     "full_name": user.first_name, 
                     "is_admin": user.is_staff,
                     "email": user.email
@@ -95,7 +98,7 @@ def login(request):
             return JsonResponse({"error": "Server error: " + str(e)}, status=500)
 
 # ==============================
-# 3. USER PROFILE MANAGEMENT
+# 3. USER PROFILE & WALLET MANAGEMENT
 # ==============================
 @api_view(['GET', 'PUT'])
 @permission_classes([IsAuthenticated])
@@ -105,17 +108,39 @@ def profile_view(request):
         return JsonResponse({
             "full_name": request.user.first_name,
             "email": request.user.email,
-            "phone": profile.phone,
-            "address": profile.address
+            "phone": profile.phone if hasattr(profile, 'phone') else "",
+            "address": profile.address if hasattr(profile, 'address') else "",
+            "location": profile.location if hasattr(profile, 'location') else "Surat, Gujarat",
+            "balance": str(profile.balance) if hasattr(profile, 'balance') else "0.00",
+            "age": str(profile.birth_date) if hasattr(profile, 'birth_date') and profile.birth_date else "",
+            "gender": profile.gender if hasattr(profile, 'gender') else "",
+            "bio": profile.bio if hasattr(profile, 'bio') else "SKINCARE ENTHUSIAST"
         })
     elif request.method == 'PUT':
         data = request.data
         request.user.first_name = data.get('full_name', request.user.first_name)
         request.user.save()
-        profile.phone = data.get('phone', profile.phone)
-        profile.address = data.get('address', profile.address)
+        if hasattr(profile, 'phone'): profile.phone = data.get('phone', profile.phone)
+        if hasattr(profile, 'address'): profile.address = data.get('address', profile.address)
+        if hasattr(profile, 'location'): profile.location = data.get('location', profile.location)
+        if hasattr(profile, 'bio'): profile.bio = data.get('bio', profile.bio)
         profile.save()
-        return JsonResponse({"message": "Profile updated!"})
+        return JsonResponse({"message": "Profile updated!", "status": "success"})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_money(request):
+    try:
+        profile, _ = Profile.objects.get_or_create(user=request.user)
+        amount = request.data.get('amount', 0)
+        if float(amount) <= 0:
+            return JsonResponse({"error": "Invalid amount"}, status=400)
+            
+        profile.balance += decimal.Decimal(str(amount))
+        profile.save()
+        return JsonResponse({"message": "Money added successfully", "balance": str(profile.balance), "status": "success"})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
 # ==============================
 # 4. STORE & CART
@@ -130,14 +155,15 @@ def add_to_cart(request):
     try:
         product = Product.objects.get(id=request.data.get("product_id"))
         item, created = CartItem.objects.get_or_create(user=request.user, product=product)
-        if not created: item.quantity += 1
+        if not created: 
+            item.quantity += 1
         item.save()
         return JsonResponse({"message": "Added to cart"})
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
 # ==============================
-# 5. USER ROUTINE (Fixed Function)
+# 5. USER ROUTINE
 # ==============================
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -179,7 +205,7 @@ def place_order(request):
         )
         
         subject = f"Order Confirmed - Dreama #{order.id}"
-        message = f"Hi {order.full_name},\n\nYour order has been placed successfully using {order.payment_method}.\nTotal: £{order.total_amount}"
+        message = f"Hi {order.full_name},\n\nYour order has been placed successfully using {order.payment_method}.\nTotal: ₹{order.total_amount}"
         send_mail(subject, message, settings.EMAIL_HOST_USER, [order.email], fail_silently=True)
         
         return JsonResponse({"message": "Order success!", "order_id": order.id, "status": "success"}, status=201)
@@ -228,7 +254,7 @@ def download_invoice(request, order_id):
         p.drawString(120, 620, f"Address: {order.address}, {order.city} - {order.zip_code}")
         p.line(100, 600, 500, 600)
         p.setFont("Helvetica-Bold", 14)
-        p.drawString(100, 570, f"TOTAL AMOUNT PAID: £{order.total_amount}")
+        p.drawString(100, 570, f"TOTAL AMOUNT PAID: ₹{order.total_amount}")
         p.showPage()
         p.save()
         return response

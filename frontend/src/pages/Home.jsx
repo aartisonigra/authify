@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
+import axios from 'axios';
 import Navbar from '../components/Common/Navbar';
 import Button from '../components/Common/Button';
 import './Home.css'; 
@@ -9,13 +10,36 @@ import girlFace from '../assets/girl-face.png';
 import skincareProducts from '../assets/Top-5-Skincare-Products-Every-Girl-Should-Have-in-2025-removebg-preview.png';
 
 const Home = () => {
-  // 1. Products Data
-  const products = [
-    { id: 1, name: "Hydrating Solar Mist", price: "$22.00", tags: ["Coconut", "Unscented"], img: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=400" },
-    { id: 2, name: "Cooling After Sun Gel", price: "$24.00", tags: ["50ml", "100ml"], img: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&q=80&w=400" },
-    { id: 3, name: "Solar Lip Shield", price: "$15.00", tags: ["Coconut", "Watermelon"], img: "https://images.unsplash.com/photo-1599305090598-fe179d501227?auto=format&fit=crop&q=80&w=400", oldPrice: "$20.00" },
-    { id: 4, name: "Glow Daily Sun Serum", price: "$32.00", tags: ["30ml", "50ml"], img: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=400" }
-  ];
+  // 1. Dynamic Products Data from Django PostgreSQL Backend
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    // Django api/views.py na get_products endpoint mathi products mangavva mate
+    axios.get('http://127.0.0.1:8000/api/products/')
+      .then(res => {
+        // Jo database ma items hashe to e active dekhase
+        if (res.data && res.data.length > 0) {
+          setProducts(res.data.slice(0, 4)); // Khali starting na 4 items hero slider grid mate
+        } else {
+          // Backup fallback details jo db empty hoy
+          setProducts([
+            { id: 1, name: "Hydrating Solar Mist", price: "22.00", image_url: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=400" },
+            { id: 2, name: "Cooling After Sun Gel", price: "24.00", image_url: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&q=80&w=400" },
+            { id: 3, name: "Solar Lip Shield", price: "15.00", image_url: "https://images.unsplash.com/photo-1599305090598-fe179d501227?auto=format&fit=crop&q=80&w=400" },
+            { id: 4, name: "Glow Daily Sun Serum", price: "32.00", image_url: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=400" }
+          ]);
+        }
+      })
+      .catch(err => {
+        console.error("Error fetching items, using default backup standard:", err);
+        setProducts([
+          { id: 1, name: "Hydrating Solar Mist", price: "22.00", image_url: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=400" },
+          { id: 2, name: "Cooling After Sun Gel", price: "24.00", image_url: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&q=80&w=400" },
+          { id: 3, name: "Solar Lip Shield", price: "15.00", image_url: "https://images.unsplash.com/photo-1599305090598-fe179d501227?auto=format&fit=crop&q=80&w=400" },
+          { id: 4, name: "Glow Daily Sun Serum", price: "32.00", image_url: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=400" }
+        ]);
+      });
+  }, []);
 
   // 2. Glow Steps Data
   const glowSteps = [
@@ -31,6 +55,24 @@ const Home = () => {
     { id: 3, img: "https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400" }, 
     { id: 4, img: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=400" }
   ];
+
+  // Cart Handler Event
+  const handleAddToCart = async (productId) => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      alert("Please login first to add items into cart!");
+      return;
+    }
+    try {
+      await axios.post('http://127.0.0.1:8000/api/cart/add/', 
+        { product_id: productId },
+        { headers: { 'Authorization': `Bearer ${token}` } }
+      );
+      alert("Added to cart successfully!");
+    } catch (error) {
+      console.error("Cart addition failed:", error);
+    }
+  };
 
   return (
     <div className="home-wrapper">
@@ -74,14 +116,14 @@ const Home = () => {
               {products.map((item) => (
                 <div className="product-card" key={item.id}>
                   <div className="product-img-wrapper">
-                    <img src={item.img} alt={item.name} />
-                    <button className="add-btn">+</button>
+                    <img src={item.image_url} alt={item.name} />
+                    <button className="add-btn" onClick={() => handleAddToCart(item.id)}>+</button>
                   </div>
                   <div className="product-info">
                     <h3 className="product-name">{item.name}</h3>
                     <div className="price-container">
-                      {item.oldPrice && <span className="old-price">{item.oldPrice}</span>}
-                      <span className="current-price">{item.price}</span>
+                      {item.old_price && <span className="old-price">₹{item.old_price}</span>}
+                      <span className="current-price">₹{item.price}</span>
                     </div>
                   </div>
                 </div>
@@ -111,7 +153,6 @@ const Home = () => {
               <div className="glow-info">
                 <h4 className="step-name">{step.label}</h4>
                 <p className="step-desc">{step.sub}</p>
-                {/* Have aa button active chhe */}
                 <Link to={step.path}>
                   <button className="glow-shop-btn">Shop All →</button>
                 </Link>
@@ -128,7 +169,6 @@ const Home = () => {
             <h2 className="standard-title">the new <br /> standard</h2>
             <div className="standard-right-text">
               <p className="born-text">born in the lab.<br />worn in the wild.</p>
-              {/* FIXED: Our Story button connected with Link */}
               <Link to="/our-story">
                 <button className="story-btn">Our Story →</button>
               </Link>
@@ -145,7 +185,7 @@ const Home = () => {
         <div className="shipping-content">
           <h2 className="shipping-title">free shipping is on us.</h2>
           <div className="shipping-right">
-            <p className="shipping-text">Own the glow. Free delivery on all orders over $60.</p>
+            <p className="shipping-text">Own the glow. Free delivery on all orders over ₹500.</p>
             <Link to="/shop">
               <button className="shop-now-btn">Shop Now →</button>
             </Link>
@@ -215,7 +255,7 @@ const Home = () => {
 
           <div className="footer-brand">
             <h1 className="footer-logo">dreama.</h1>
-            <p className="copyright">© 2026 by dreama. Powered and secured by Wix</p>
+            <p className="copyright">© 2026 by dreama. All rights reserved.</p>
           </div>
         </div>
       </footer>

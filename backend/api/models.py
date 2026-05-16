@@ -23,12 +23,17 @@ class Product(models.Model):
 # ==============================
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    bio = models.CharField(max_length=500, blank=True, default="SKINCARE ENTHUSIAST")
+    location = models.CharField(max_length=100, blank=True, default="Surat, Gujarat")
+    birth_date = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=10, blank=True)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00) # User na dynamic paisa/wallet
     phone = models.CharField(max_length=15, blank=True)
     address = models.TextField(blank=True)
     profile_pic = models.ImageField(upload_to='profiles/', blank=True, null=True)
 
     def __str__(self):
-        return f"Profile of {self.user.username}"
+        return f"{self.user.username} - ₹{self.balance}"
 
 # --- Signals: User બને એટલે Profile પણ જાતે બની જાય ---
 @receiver(post_save, sender=User)
@@ -71,7 +76,7 @@ class CartItem(models.Model):
         return f"{self.quantity} x {self.product.name}"
 
 # ==============================
-# 5. ORDER MODEL (Updated)
+# 5. ORDER MODEL
 # ==============================
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -83,7 +88,7 @@ class Order(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     
     # --- NEW FIELDS FOR PAYMENT & STATUS ---
-    payment_method = models.CharField(max_length=50, default='cod') # cod, gpay, applepay
+    payment_method = models.CharField(max_length=50, default='cod') # cod, gpay, wallet, razorpay
     payment_status = models.CharField(max_length=20, default='Pending')
     
     is_subscription = models.BooleanField(default=False)
