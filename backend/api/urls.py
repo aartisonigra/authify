@@ -1,22 +1,15 @@
-from django.contrib import admin
-from django.urls import path, include
-from django.http import HttpResponse
-# અહીં આપણે સ્પેસિફિક ફંક્શન્સ જ ડાયરેક્ટ ઈમ્પોર્ટ કરીએ છીએ, જેથી મોડ્યુલ કન્ફ્યુઝન જ ન થાય
-from api.views import profile_view, add_money, place_order 
-
-def home(request):
-    return HttpResponse("Hello Aarti! Django + Google Login is working ✅")
+from django.urls import path
+# ખાતરી કરો કે તમારા views ના બધા જ ફંક્શનના નામ અહીં સાચા લખેલા છે
+from api.views import profile_view, add_money, place_order, verify_payment, signup_view, login_view 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', home),
-    
-    # એપ લેવલના રાઉટ્સ
-    path('api/', include('api.urls')), 
-    path('accounts/', include('allauth.urls')),
-    
-    # અહીં ડાયરેક્ટ ફંક્શન પાસ કર્યા
-    path('api/place-order/', place_order, name='place_order'),
-    path('api/profile/', profile_view, name='profile_view'), 
-    path('api/add-money/', add_money, name='add_money'),     
+    # 🔐 લોગિન અને સાઇનઅપ
+    path('signup/', signup_view, name='signup_view'),
+    path('login/', login_view, name='login_view'),
+
+    # 🛒 ઓર્ડર અને પ્રોફાઇલ
+    path('place-order/', place_order, name='place_order'),
+    path('profile/', profile_view, name='profile_view'), 
+    path('add-money/', add_money, name='add_money'),     
+    path('verify-payment/', verify_payment, name='verify_payment'),
 ]

@@ -1,4 +1,4 @@
-/* Auth.css - Dreama. Brand Theme */
+/* Auth.css - Dreama. Brand Theme (Optimized) */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;700&display=swap');
 
 .auth-wrapper {
@@ -6,14 +6,14 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #fff5f7; /* Dreama Pink background */
+  background-color: #fff5f7;
   padding: 20px;
   position: relative;
   overflow: hidden;
   font-family: 'Inter', sans-serif;
 }
 
-/* Background Blur Decoration */
+/* Background Decoration */
 .auth-wrapper::before {
   content: "";
   position: absolute;
@@ -30,8 +30,7 @@
 .auth-split-container {
   display: flex;
   width: 1100px;
-  height: auto;
-  min-height: 680px;
+  min-height: 650px;
   background: white;
   border-radius: 50px;
   overflow: hidden;
@@ -39,7 +38,7 @@
   z-index: 1;
 }
 
-/* Left side with Pink Gradient */
+/* Left side Design */
 .auth-left-design {
   flex: 1;
   background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
@@ -56,17 +55,17 @@
   top: 45px;
   left: 45px;
   font-weight: 900;
-  color: #e85289; /* Dreama brand pink */
+  color: #e85289;
   font-size: 26px;
   letter-spacing: -1px;
 }
 
 .main-image-wrapper {
   width: 85%;
-  height: 480px; /* Adjusted for better image look */
+  height: 450px;
   border-radius: 40px;
   overflow: hidden;
-  border: 15px solid white; /* White frame */
+  border: 10px solid white;
   box-shadow: 0 20px 40px rgba(0,0,0,0.08);
 }
 
@@ -77,8 +76,7 @@
 }
 
 .protect-skin-badge {
-  position: absolute;
-  bottom: 60px;
+  margin-top: 30px;
   background: #e85289; 
   padding: 12px 30px;
   border-radius: 50px;
@@ -91,37 +89,23 @@
 /* Right side Form Styling */
 .auth-right-form {
   flex: 1.1;
-  padding: 50px 80px;
+  padding: 60px 80px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .form-title {
-  font-size: 42px;
+  font-size: 40px;
   color: #333;
   font-family: 'Playfair Display', serif;
   margin-bottom: 8px;
-  font-weight: 700;
 }
 
 .form-subtitle {
   color: #e85289;
-  margin-bottom: 35px;
-  font-size: 15px;
-  font-weight: 500;
-}
-
-.input-group {
-  margin-bottom: 15px;
-}
-
-.input-group label {
+  margin-bottom: 30px;
   font-size: 14px;
-  margin-bottom: 8px;
-  font-weight: 700;
-  color: #555;
-  display: block;
 }
 
 .input-field {
@@ -129,13 +113,12 @@
   padding: 14px 18px;
   border: 1.5px solid #fce4ec;
   border-radius: 15px;
-  background: #fff;
-  outline: none;
-  transition: all 0.3s ease;
+  box-sizing: border-box; /* મહત્વનું: પેડિંગ માટે */
+  transition: all 0.3s;
 }
 
 .input-field:focus {
-  border-color: #e85289; /* Updated to brand pink */
+  border-color: #e85289;
   box-shadow: 0 0 0 4px rgba(232, 82, 137, 0.1);
 }
 
@@ -147,37 +130,16 @@
   border: none;
   border-radius: 50px;
   font-weight: 700;
-  font-size: 16px;
   cursor: pointer;
-  margin-top: 25px;
-  transition: all 0.3s ease;
+  margin-top: 20px;
+  transition: 0.3s;
 }
 
-.submit-btn-premium:hover {
-  background: #d44179;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(232, 82, 137, 0.2);
-}
+.submit-btn-premium:hover { background: #d44179; transform: translateY(-2px); }
 
-.divider {
-  text-align: center;
-  margin: 20px 0;
-  color: #ccc;
+/* Responsive: Mobile માટે ફેરફાર */
+@media (max-width: 900px) {
+  .auth-split-container { width: 95%; }
+  .auth-left-design { display: none; } /* મોબાઈલમાં ડાબી બાજુ છુપાવી દીધી */
+  .auth-right-form { padding: 40px; }
 }
-
-.google-btn {
-  width: 100%;
-  padding: 12px;
-  border: 1.5px solid #eee;
-  background: white;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  cursor: pointer;
-  font-weight: 600;
-  color: #666;
-}
-
-.footer-link b { color: #e85289; }

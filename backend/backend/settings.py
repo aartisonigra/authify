@@ -127,9 +127,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-# 🚨 અહીં તમારું Gmail અને App Password નાખજો
+
 EMAIL_HOST_USER = '23amtics292@gmail.com' 
-EMAIL_HOST_PASSWORD = 'your-app-password' 
+EMAIL_HOST_PASSWORD = 'A@252525' 
 
 # ==============================
 # STATIC & MEDIA FILES
@@ -145,3 +145,9 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
+
+# ==============================
+# RAZORPAY PAYMENT GATEWAY SETTINGS
+# ==============================
+RAZORPAY_KEY_ID = "rzp_test_StAGk0CmyYTfTp"
+RAZORPAY_KEY_SECRET = "i9cM2vI4sZDMofXcc3ZUP9Lc"

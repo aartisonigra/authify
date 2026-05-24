@@ -1,26 +1,43 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom"; // 💡 FIXED: useParams ઉમેર્યું
 import axios from "axios";
 import Navbar from "../components/Common/Navbar";
 import Footer from "../components/Common/Footer";
 import "./AllProducts.css";
 
-const AllProducts = () => {
+const AllProducts = (props) => {
   const navigate = useNavigate();
+  const { category: urlCategory } = useParams(); // 💡 FIXED: URL માંથી કેટેગરી મેળવશે
+  
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cart, setCart] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState({});
 
   const token = localStorage.getItem("access_token");
 
+  // 💡 FIXED: દરેક પ્રોડક્ટમાં સાચી 'category' પ્રોપર્ટી ઉમેરી દીધી છે
   const products = [
-    { id: 1, name: "Midnight Moisture Mask", price: 60.0, time: "PM", img: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400", sizes: ["200ml", "300ml"] },
-    { id: 2, name: "Awake Eye Balm", price: 42.0, time: "BOTH", img: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400", sizes: ["150ml", "200ml"] },
-    { id: 3, name: "Silk Wash Cleanser", price: 35.0, time: "BOTH", img: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400", tag: "Bestseller", sizes: ["150ml", "200ml"] },
-    { id: 4, name: "Glow Daily Serum", price: 48.0, time: "AM", img: "https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400", sizes: ["30ml", "50ml"] },
-    { id: 5, name: "Hydrating Day Cream", price: 50.0, time: "AM", img: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?q=80&w=400", sizes: ["50ml", "100ml"] },
-    { id: 6, name: "Pure Micellar Water", price: 20.0, time: "BOTH", img: "https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=400", sizes: ["200ml", "400ml"] }
+    { id: 1, name: "Midnight Moisture Mask", price: 60.0, time: "PM", img: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400", sizes: ["200ml", "300ml"], category: "hydrate" },
+    { id: 2, name: "Awake Eye Balm", price: 42.0, time: "BOTH", img: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400", sizes: ["150ml", "200ml"], category: "hydrate" },
+    { id: 3, name: "Silk Wash Cleanser", price: 35.0, time: "BOTH", img: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400", tag: "Bestseller", sizes: ["150ml", "200ml"], category: "cleanse" },
+    { id: 4, name: "Glow Daily Serum", price: 48.0, time: "AM", img: "https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400", sizes: ["30ml", "50ml"], category: "new-arrivals" },
+    { id: 5, name: "Hydrating Day Cream", price: 50.0, time: "AM", img: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?q=80&w=400", sizes: ["50ml", "100ml"], category: "protect" },
+    { id: 6, name: "Pure Micellar Water", price: 20.0, time: "BOTH", img: "https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=400", sizes: ["200ml", "400ml"], category: "cleanse" }
   ];
+
+  // 💡 FIXED: નક્કી કરો કે અત્યારે કઈ કેટેગરી એક્ટિવ છે
+  const currentCategory = props.category || urlCategory || "all";
+
+  // 💡 FIXED: એક્ટિવ કેટેગરીના આધારે પ્રોડક્ટ્સ ફિલ્ટર કરવાનું લોજિક
+  const filteredProducts = currentCategory === "all"
+    ? products
+    : products.filter(product => product.category === currentCategory.toLowerCase());
+
+  // ટાઇટલ સેટ કરવા માટે (જેમ કે Cleanse Products, Hydrate Products વગેરે)
+  const getPageTitle = () => {
+    if (currentCategory === "all") return "All Products";
+    return currentCategory.charAt(0).toUpperCase() + currentCategory.slice(1);
+  };
 
   const addToRoutine = async (productId, type) => {
     if (!token) {
@@ -132,11 +149,14 @@ const AllProducts = () => {
       {isCartOpen && <div className="cart-overlay" onClick={() => setIsCartOpen(false)}></div>}
       <div className="shop-container">
         <div className="shop-header">
-          <p className="breadcrumb"><Link to="/">Home</Link> &gt; All Products</p>
-          <h1 className="shop-title">All Products</h1>
+          <p className="breadcrumb">
+            <Link to="/">Home</Link> &gt; {getPageTitle()}
+          </p>
+          <h1 className="shop-title">{getPageTitle()}</h1>
         </div>
         <div className="all-products-grid">
-          {products.map((product) => (
+          {/* 💡 FIXED: હવે અહીં 'products' ને બદલે 'filteredProducts' મેપ થશે */}
+          {filteredProducts.map((product) => (
             <div className="shop-product-card" key={product.id}>
               <div className="shop-img-wrapper">
                 {product.tag && <span className="product-tag">{product.tag}</span>}
@@ -168,6 +188,13 @@ const AllProducts = () => {
               </div>
             </div>
           ))}
+          
+          {/* જો કોઈ કેટેગરીમાં પ્રોડક્ટ ના હોય ત્યાર માટે */}
+          {filteredProducts.length === 0 && (
+            <p style={{ gridColumn: "1/-1", textAlign: "center", padding: "40px", color: "#666" }}>
+              No products found in this category.
+            </p>
+          )}
         </div>
       </div>
       <Footer />
